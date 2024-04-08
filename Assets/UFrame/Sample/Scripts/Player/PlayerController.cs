@@ -68,6 +68,10 @@ namespace app
 					{
 						requestActionID = PlayerAction.SetID.AirJump;
 					}
+					else if (PlayerActionCondition.Judge(PlayerAction.SetID.FastFall, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.FastFall;
+					}
 					else if (_PlayerChara.AnimationSequence.IsCancellable)
 					{
 						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara, true))
@@ -85,7 +89,24 @@ namespace app
 					{
 						requestActionID = PlayerAction.SetID.AirJump;
 					}
+					else if (PlayerActionCondition.Judge(PlayerAction.SetID.FastFall, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.FastFall;
+					}
 					else if (_PlayerChara.AnimationSequence.IsCancellable)
+					{
+						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+						{
+							requestActionID = PlayerAction.SetID.Jump;
+						}
+						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						{
+							requestActionID = PlayerAction.SetID.Move;
+						}
+					}
+					break;
+				case PlayerAction.ID.FastFall:
+					if (_PlayerChara.AnimationSequence.IsCancellable)
 					{
 						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
 						{

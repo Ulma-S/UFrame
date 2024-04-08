@@ -59,6 +59,19 @@ namespace app
 				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.JUMP, commandConditions);
 			}
 
+			{// 高速落下コマンドの登録
+				var commandConditions = new Func<bool>[2];
+				commandConditions[0] = () =>
+				{
+					return Input.GetKey(KeyCode.S);
+				};
+				commandConditions[1] = () =>
+				{
+					return Input.GetKey(KeyCode.DownArrow);
+				};
+				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.FALL, commandConditions);
+			}
+
 			{// 決定コマンドの登録
 				var commandConditions = new Func<bool>[1];
 				commandConditions[0] = () =>

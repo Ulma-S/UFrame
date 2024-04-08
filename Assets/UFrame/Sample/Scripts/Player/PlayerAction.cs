@@ -359,6 +359,75 @@ namespace app
 			public override string ActionName => "空中ジャンプ";
 #endif
 		}
+
+		public class cFastFall : cPlayerActionBase
+		{
+			private enum STATE
+			{
+				FALL,
+				END,
+			}
+
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.JUMP_LOOP, out var fallStateHash))
+				{
+					_FallStateHash = fallStateHash;
+				}
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.JUMP_END, out var endStateHash))
+				{
+					_EndStateHash = endStateHash;
+				}
+			}
+
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				var velocity = Rigidbody.velocity;
+				velocity.y = -10f;
+				Rigidbody.velocity = velocity;
+				_State = STATE.FALL;
+				SetAnimation(_FallStateHash);
+			}
+
+			protected override bool OnUpdate()
+			{
+				base.OnUpdate();
+				switch (_State)
+				{
+					case STATE.FALL:
+						if (PlayerChara.CheckGroundDistance(PlayerChara.Param.Common.MoveInfo.JumpEndCheckRayLength))
+						{
+							_State = STATE.END;
+							SetAnimation(_EndStateHash);
+						}
+						break;
+					case STATE.END:
+						if (PlayerChara.IsOnGround())
+						{
+							var velocity = Rigidbody.velocity;
+							velocity.x = 0f;
+							Rigidbody.velocity = velocity;
+						}
+						if (AnimCtrl.IsAnimationEnd(_EndStateHash))
+						{
+							return true;
+						}
+						break;
+				}
+				return false;
+			}
+
+			private int _FallStateHash = 0;
+			private int _EndStateHash = 0;
+
+			private STATE _State = STATE.FALL;
+
+#if UNITY_EDITOR
+			public override string ActionName => "高速落下";
+#endif
+		}
 		#endregion 移動
 
 		#region ダメージ

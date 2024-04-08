@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CameraParamHolder
   m_EditorClassIdentifier: 
   _ScrollCamera:
-    _OriginPosition: {x: 0, y: -2.5, z: -10}
+    _OriginPosition: {x: 0, y: 2.5, z: -10}
     _Size: 5

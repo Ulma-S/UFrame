@@ -11,8 +11,28 @@ namespace app
 		{
 			base.OnEnter();
 			var scrollCamera = cVirtualCamera.Create<cScrollVirtualCamera>();
-			GlobalService.Camera.RegisterCamera((int)CameraDef.ID.SCROLL, scrollCamera);
-			GlobalService.Camera.ChangeActiveCamera((int)CameraDef.ID.SCROLL);
+			var eventCamera = cVirtualCamera.Create<cEventVirtualCamera>();
+			GlobalService.Camera.RegisterCamera(CameraDef.ID.SCROLL, scrollCamera);
+			GlobalService.Camera.RegisterCamera(CameraDef.ID.EVENT, eventCamera);
+			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.SCROLL);
+		}
+
+		protected override void OnUpdate()
+		{
+			base.OnUpdate();
+			if (GlobalService.Input.IsCommandSuccess(UI_COMMAND_TYPE.DECIDE))
+			{
+				switch (GlobalService.Camera.CurrentCameraID)
+				{
+					case CameraDef.ID.SCROLL:
+						GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.EVENT);
+						break;
+
+					case CameraDef.ID.EVENT:
+						GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.SCROLL);
+						break;
+				}
+			}
 		}
 
 		public override bool CheckSceneTransition(out SceneDef.PACK_ID nextScenePackID)

@@ -9,5 +9,6 @@ namespace app
 		MOVE_RIGHT,
 		MOVE_LEFT,
 		JUMP,
+		FALL,
 	}
 }

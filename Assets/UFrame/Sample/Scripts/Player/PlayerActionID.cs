@@ -13,10 +13,11 @@ namespace app
 			public static readonly ACTION_ID Move = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 1);
 			public static readonly ACTION_ID Jump = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 2);
 			public static readonly ACTION_ID AirJump = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 3);
-			public static readonly ACTION_ID DamageSmall = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 4);
-			public static readonly ACTION_ID DamageSmash = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 5);
-			public static readonly ACTION_ID KneelDown = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 6);
-			public static readonly ACTION_ID Victory = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 7);
+			public static readonly ACTION_ID FastFall = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 4);
+			public static readonly ACTION_ID DamageSmall = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 5);
+			public static readonly ACTION_ID DamageSmash = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 6);
+			public static readonly ACTION_ID KneelDown = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 7);
+			public static readonly ACTION_ID Victory = new ACTION_ID((int)ActionDef.CATEGORY.PLAYER, 8);
 		}
 
 		public static class ID
@@ -25,10 +26,11 @@ namespace app
 			public const int Move = 1;
 			public const int Jump = 2;
 			public const int AirJump = 3;
-			public const int DamageSmall = 4;
-			public const int DamageSmash = 5;
-			public const int KneelDown = 6;
-			public const int Victory = 7;
+			public const int FastFall = 4;
+			public const int DamageSmall = 5;
+			public const int DamageSmash = 6;
+			public const int KneelDown = 7;
+			public const int Victory = 8;
 		}
 	}
 }

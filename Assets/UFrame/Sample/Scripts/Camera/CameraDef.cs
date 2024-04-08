@@ -8,8 +8,9 @@ namespace app
 	{
 		public enum ID
 		{
-			INVALID,
+			INVALID = -1,
 			SCROLL,
+			EVENT,
 		}
 	}
 }

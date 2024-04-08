@@ -38,6 +38,7 @@ namespace app
 			ActionController.Register<PlayerAction.cMove>(PlayerAction.SetID.Move);
 			ActionController.Register<PlayerAction.cJump>(PlayerAction.SetID.Jump);
 			ActionController.Register<PlayerAction.cAirJump>(PlayerAction.SetID.AirJump);
+			ActionController.Register<PlayerAction.cFastFall>(PlayerAction.SetID.FastFall);
 			ActionController.Register<PlayerAction.cDamageSmall>(PlayerAction.SetID.DamageSmall);
 			ActionController.Register<PlayerAction.cDamageSmash>(PlayerAction.SetID.DamageSmash);
 			ActionController.Register<PlayerAction.cKneelDown>(PlayerAction.SetID.KneelDown);

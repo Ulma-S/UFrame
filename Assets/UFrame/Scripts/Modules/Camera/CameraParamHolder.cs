@@ -11,6 +11,11 @@ namespace app
 
 		[SerializeField]
 		private cScrollCamera _ScrollCamera = null;
+
+		public float UpdateTransformScale => _UpdateTransformScale;
+
+		[SerializeField]
+		private float _UpdateTransformScale = 5f;
 	}
 
 	[Serializable]
@@ -21,7 +26,7 @@ namespace app
 		public float Size => _Size;
 
 		[SerializeField]
-		private Vector3 _OriginPosition = new Vector3(0f, -2.5f, -10f);
+		private Vector3 _OriginPosition = new Vector3(0f, 2.5f, -10f);
 
 		[SerializeField]
 		private float _Size = 5f;

@@ -4,14 +4,16 @@ using UnityEngine;
 
 namespace uframe
 {
-	public class CameraManager : GlobalServiceElement<CameraManager>
+	public class CameraService : GlobalServiceElement<CameraService>
 	{
-		public void ChangeActiveCamera(int cameraID, float duration = 1f)
+		public void ChangeActiveCamera(int cameraID, float duration = 0.8f)
 		{
 			if (_VirtualCameraHolder.TryGetValue(cameraID, out var camera))
 			{
 				PrevVirtualCamera = CurrentVirtualCamera;
 				CurrentVirtualCamera = camera;
+				CurrentCameraIDInt = cameraID;
+				ChangeDurationTimer.Reset();
 				ChangeDurationTimer.Limit = duration;
 				ChangeDurationTimer.Enabled = true;
 			}
@@ -53,6 +55,11 @@ namespace uframe
 
 		}
 
+		protected virtual void OnEndChangeDuration()
+		{
+
+		}
+
 		protected virtual void OnUpdateTransform()
 		{
 
@@ -69,6 +76,9 @@ namespace uframe
 			}
 			if (ChangeDurationTimer.IsTimeOut || ChangeDurationTimer.Limit == 0f)
 			{
+				Camera.transform.position = CurrentVirtualCamera.Position;
+				Camera.transform.rotation = CurrentVirtualCamera.Rotation;
+				OnEndChangeDuration();
 				ChangeDurationTimer.Enabled = false;
 				return;
 			}
@@ -86,6 +96,12 @@ namespace uframe
 			Camera.transform.rotation = Quaternion.Lerp(Camera.transform.rotation, CurrentVirtualCamera.Rotation, lerpScale);
 			OnUpdateTransform();
 		}
+
+		public int CurrentCameraIDInt
+		{
+			get;
+			private set;
+		} = -1;
 
 		protected Camera Camera
 		{

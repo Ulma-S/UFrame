@@ -42,11 +42,12 @@ namespace uframe
 			_Action?.Invoke(arg);
 		}
 
-		public void Register(Action<T> action)
+		public cSafeEventHandler Register(Action<T> action)
 		{
 			_Action += action;
 			var handler = new cSafeEventHandler<T>(this);
 			_ActionHolder.Add(handler, action);
+			return handler;
 		}
 
 		public void Release(cSafeEventHandler<T> handler)
@@ -77,9 +78,9 @@ namespace uframe
 		private cSafeEvent _SafeEvent = null;
 	}
 
-	public class cSafeEventHandler<T> : cSafeEvent
+	public class cSafeEventHandler<T> : cSafeEventHandler
 	{
-		public cSafeEventHandler(cSafeEvent<T> safeEvent)
+		public cSafeEventHandler(cSafeEvent<T> safeEvent) : base(null)
 		{
 			_SafeEvent = safeEvent;
 		}

@@ -48,6 +48,12 @@ namespace app
 						return true;
 					}
 					break;
+				case PlayerAction.ID.FastFall:
+					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.FALL))
+					{
+						return true;
+					}
+					break;
 			}
 			return false;
 		}
