@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7deac9c549823c148b9a2367bf62b09e, type: 3}
+  m_Name: PlayerParamHolder
+  m_EditorClassIdentifier: 
+  _Common:
+    _MoveInfo:
+      _MoveSpeed: 2.5
+      _MoveSpeedScaleAir: 0.7
+      _JumpForce: 10
+      _JumpForceScaleAir: 0.8
+      _MaxAirJumpCount: 1
+      _GroundCheckOriginOffset: {x: 0, y: 0.5, z: 0}
+      _GroundCheckRayLength: 0.35
+      _JumpEndCheckRayLength: 0.6
+      _GroundCheckSphereRadius: 0.2

@@ -34,3 +34,21 @@ MonoBehaviour:
   - _ID: 7
     _Clip: {fileID: 7400024, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
     _StateName: JumpEnd
+  - _ID: 8
+    _Clip: {fileID: 7400008, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: DamageSmall
+  - _ID: 9
+    _Clip: {fileID: 7400010, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: DamageSmash
+  - _ID: 10
+    _Clip: {fileID: 7400012, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: DamageSmashUp
+  - _ID: 11
+    _Clip: {fileID: 7400014, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: KneelDown
+  - _ID: 12
+    _Clip: {fileID: 7400016, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: KneelDownUp
+  - _ID: 13
+    _Clip: {fileID: 7400018, guid: b6475d894388e0f4bbe9ba904c073a2e, type: 3}
+    _StateName: Congraturation

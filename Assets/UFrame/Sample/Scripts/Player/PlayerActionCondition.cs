@@ -7,12 +7,15 @@ namespace app
 {
 	public class PlayerActionCondition
 	{
-		public static bool Judge(ACTION_ID actionID, PlayerCharacter chara)
+		public static bool Judge(ACTION_ID actionID, PlayerCharacter chara, bool canSameAction = false)
 		{
 			var currentActionID = chara.ActionController.CurrentActionID;
-			if (currentActionID == actionID)
+			if (!canSameAction)
 			{
-				return false;
+				if (currentActionID == actionID)
+				{
+					return false;
+				}
 			}
 
 			switch (actionID.Index)
@@ -30,6 +33,16 @@ namespace app
 					}
 					break;
 				case PlayerAction.ID.Jump:
+					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.JUMP))
+					{
+						return true;
+					}
+					break;
+				case PlayerAction.ID.AirJump:
+					if (chara.PlayerContext.MoveInfo.AirJumpCount > chara.Param.Common.MoveInfo.MaxAirJumpCount)
+					{
+						return false;
+					}
 					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.JUMP))
 					{
 						return true;

@@ -11,9 +11,28 @@ namespace uframe
 
 		}
 
+		protected virtual void OnStart()
+		{
+
+		}
+
+		protected virtual void OnUpdate()
+		{
+		}
+
 		private void Awake()
 		{
 			OnAwake();
+		}
+
+		private void Start()
+		{
+			OnStart();
+		}
+
+		private void Update()
+		{
+			OnUpdate();
 		}
 
 		public static T Instance

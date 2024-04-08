@@ -5,58 +5,27 @@ using UnityEngine;
 
 namespace app
 {
-	public class cPlayerController : cCharacterController
+	[DefaultExecutionOrder((int)EXECUTION_ORDER.PLAYER_CONTROLLER)]
+	public class PlayerController : CharacterControllerBase
 	{
+		protected override void OnStart()
+		{
+			_PlayerChara = Character as PlayerCharacter;
+		}
+
 		protected override void OnUpdate()
 		{
 			UpdateMoveState();
 
-			var currentActionID = Character.ActionController.CurrentActionID;
-			var requestActionID = ACTION_ID.Invalid;
-			switch (currentActionID.Index)
-			{
-				case PlayerAction.ID.Idle:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, PlayerChara))
-					{
-						requestActionID = PlayerAction.SetID.Jump;
-					}
-					else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, PlayerChara))
-					{
-						requestActionID = PlayerAction.SetID.Move;
-					}
-					break;
-				case PlayerAction.ID.Move:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, PlayerChara))
-					{
-						requestActionID = PlayerAction.SetID.Jump;
-					}
-					break;
-				case PlayerAction.ID.Jump:
-					if (PlayerChara.AnimationSequence.IsCancellable)
-					{
-						if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, PlayerChara))
-						{
-							requestActionID = PlayerAction.SetID.Move;
-						}
-					}
-					break;
-			}
-			if (PlayerChara.ActionController.IsActionEnd)
-			{
-				if (requestActionID == ACTION_ID.Invalid)
-				{
-					requestActionID = PlayerAction.SetID.Idle;
-				}
-			}
-			if (requestActionID != ACTION_ID.Invalid)
-			{
-				PlayerChara.RequestSetAction(requestActionID);
+			if (!_PlayerChara.PlayerContext.CheckSafeFlag(PlayerDef.SAFE_FLAG.DAMAGE_FLOW))
+			{// ダメージ処理中は専用処理
+				UpdateAction();
 			}
 		}
 
 		private void UpdateMoveState()
 		{
-			var moveInfo = PlayerChara.PlayerContext.MoveInfo;
+			var moveInfo = _PlayerChara.PlayerContext.MoveInfo;
 			moveInfo.PrevMoveState = moveInfo.MoveState;
 			if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.MOVE_RIGHT))
 			{
@@ -72,6 +41,76 @@ namespace app
 			}
 		}
 
-		private PlayerCharacter PlayerChara => Character as PlayerCharacter;
+		private void UpdateAction()
+		{
+			var currentActionID = Character.ActionController.CurrentActionID;
+			var requestActionID = ACTION_ID.Invalid;
+			switch (currentActionID.Index)
+			{
+				case PlayerAction.ID.Idle:
+					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.Jump;
+					}
+					else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.Move;
+					}
+					break;
+				case PlayerAction.ID.Move:
+					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.Jump;
+					}
+					break;
+				case PlayerAction.ID.Jump:
+					if (PlayerActionCondition.Judge(PlayerAction.SetID.AirJump, _PlayerChara))
+					{
+						requestActionID = PlayerAction.SetID.AirJump;
+					}
+					else if (_PlayerChara.AnimationSequence.IsCancellable)
+					{
+						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara, true))
+						{
+							requestActionID = PlayerAction.SetID.Jump;
+						}
+						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						{
+							requestActionID = PlayerAction.SetID.Move;
+						}
+					}
+					break;
+				case PlayerAction.ID.AirJump:
+					if (PlayerActionCondition.Judge(PlayerAction.SetID.AirJump, _PlayerChara, true))
+					{
+						requestActionID = PlayerAction.SetID.AirJump;
+					}
+					else if (_PlayerChara.AnimationSequence.IsCancellable)
+					{
+						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+						{
+							requestActionID = PlayerAction.SetID.Jump;
+						}
+						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						{
+							requestActionID = PlayerAction.SetID.Move;
+						}
+					}
+					break;
+			}
+			if (_PlayerChara.ActionController.IsActionEnd)
+			{
+				if (requestActionID == ACTION_ID.Invalid)
+				{
+					requestActionID = PlayerAction.SetID.Idle;
+				}
+			}
+			if (requestActionID != ACTION_ID.Invalid)
+			{
+				_PlayerChara.RequestSetAction(requestActionID);
+			}
+		}
+
+		private PlayerCharacter _PlayerChara = null;
 	}
 }

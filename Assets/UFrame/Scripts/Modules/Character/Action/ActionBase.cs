@@ -39,5 +39,13 @@ namespace uframe
 			get;
 			private set;
 		}
+
+#if UNITY_EDITOR
+		public virtual string ActionName
+		{
+			get;
+			protected set;
+		} = string.Empty;
+#endif
 	}
 }

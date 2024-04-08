@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using uframe;
 using UnityEngine;
@@ -9,6 +10,11 @@ namespace app
 	{
 		public class cPlayerActionBase : cActionBase
 		{
+			public bool CheckActionAttribute(PlayerDef.ACTION_ATTR attr)
+			{
+				return (_ActionAttribute & (uint)attr) != 0;
+			}
+
 			protected override void OnSetup()
 			{
 				PlayerChara = Chara as PlayerCharacter;
@@ -20,13 +26,42 @@ namespace app
 
 			protected override bool OnUpdate()
 			{
-				UpdateFront();
+				UpdateStandState();
+				if (UpdateFrontEnabled)
+				{
+					UpdateFront();
+				}
 				return base.OnUpdate();
 			}
 
 			protected void SetAnimation(int stateHash)
 			{
 				PlayerChara.AnimationController.SetAnimation(stateHash);
+			}
+
+			protected void SetActionAttribute(PlayerDef.ACTION_ATTR[] actionAttributes)
+			{
+				foreach (var attribute in actionAttributes)
+				{
+					var attrNum = (uint)attribute;
+					_ActionAttribute |= attrNum;
+				}
+			}
+
+			private void UpdateStandState()
+			{
+				if (Chara.IsOnGround())
+				{
+					var velocity = Rigidbody.velocity;
+					if (velocity.y <= 0f)
+					{
+						PlayerChara.PlayerContext.MoveInfo.AirJumpCount = 0;
+					}
+				}
+				else
+				{
+					Chara.SetStandState(CharacterDef.STAND_STATE.FLY);
+				}
 			}
 
 			private void UpdateFront()
@@ -78,6 +113,14 @@ namespace app
 				get;
 				private set;
 			} = null;
+
+			protected virtual bool UpdateFrontEnabled
+			{
+				get;
+				set;
+			} = true;
+
+			private uint _ActionAttribute = 0;
 		}
 
 		public class cPlayerSimpleActionBase : cPlayerActionBase
@@ -130,26 +173,37 @@ namespace app
 				}
 				Rigidbody.velocity = velocity;
 			}
+
+#if UNITY_EDITOR
+			public override string ActionName => "待機";
+#endif
 		}
 
+		#region 移動
 		public class cMoveBase : cPlayerActionBase
 		{
 			protected bool UpdateMove()
 			{
 				var moveState = PlayerChara.PlayerContext.MoveInfo.MoveState;
+				var moveInfo = PlayerChara.Param.Common.MoveInfo;
+				var moveSpeedAbs = moveInfo.MoveSpeed;
+				if (Chara.StandState == CharacterDef.STAND_STATE.FLY)
+				{
+					moveSpeedAbs *= moveInfo.MoveSpeedScaleAir;
+				}
 				switch (moveState)
 				{
 					case PlayerDef.MOVE_STATE.MOVE_LEFT:
 						{
 							var velocity = Rigidbody.velocity;
-							velocity.x = -3f;
+							velocity.x = -moveSpeedAbs;
 							Rigidbody.velocity = velocity;
 						}
 						return false;
 					case PlayerDef.MOVE_STATE.MOVE_RIGHT:
 						{
 							var velocity = Rigidbody.velocity;
-							velocity.x = 3f;
+							velocity.x = moveSpeedAbs;
 							Rigidbody.velocity = velocity;
 						}
 						return false;
@@ -190,9 +244,13 @@ namespace app
 
 			protected readonly int MoveBlendHash = Animator.StringToHash("MoveBlendValue");
 			private int _StateHash = 0;
+
+#if UNITY_EDITOR
+			public override string ActionName => "移動";
+#endif
 		}
 
-		public class cJump : cMoveBase
+		public class cJumpBase : cMoveBase
 		{
 			private enum STATE
 			{
@@ -224,7 +282,15 @@ namespace app
 				_State = STATE.START;
 				AnimCtrl.SetAnimation(_JumpStartStateHash);
 				var velocity = Rigidbody.velocity;
-				velocity.y = 8f;
+				if (Chara.StandState == CharacterDef.STAND_STATE.GROUND)
+				{
+					velocity.y = PlayerChara.Param.Common.MoveInfo.JumpForce;
+				}
+				else if (Chara.StandState == CharacterDef.STAND_STATE.FLY)
+				{
+					var moveInfo = PlayerChara.Param.Common.MoveInfo;
+					velocity.y = moveInfo.JumpForce * moveInfo.JumpForceScaleAir;
+				}
 				Rigidbody.velocity = velocity;
 			}
 
@@ -241,13 +307,19 @@ namespace app
 						}
 						break;
 					case STATE.LOOP:
-						if (PlayerChara.CheckGround())
+						if (PlayerChara.CheckGroundDistance(PlayerChara.Param.Common.MoveInfo.JumpEndCheckRayLength))
 						{
 							_State = STATE.END;
 							AnimCtrl.SetAnimation(_JumpEndStateHash);
 						}
 						break;
 					case STATE.END:
+						if (PlayerChara.IsOnGround())
+						{
+							var velocity = Rigidbody.velocity;
+							velocity.x = 0f;
+							Rigidbody.velocity = velocity;
+						}
 						if (AnimCtrl.IsAnimationEnd(_JumpEndStateHash))
 						{
 							return true;
@@ -266,6 +338,216 @@ namespace app
 			private int _JumpEndStateHash = 0;
 
 			private STATE _State = STATE.START;
+		}
+
+		public class cJump : cJumpBase
+		{
+#if UNITY_EDITOR
+			public override string ActionName => "ジャンプ";
+#endif
+		}
+
+		public class cAirJump : cJumpBase
+		{  
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				PlayerChara.PlayerContext.MoveInfo.AirJumpCount++;
+			}
+
+#if UNITY_EDITOR
+			public override string ActionName => "空中ジャンプ";
+#endif
+		}
+		#endregion 移動
+
+		#region ダメージ
+
+		public class cDamageBase : cPlayerActionBase
+		{
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				SetActionAttribute(new PlayerDef.ACTION_ATTR[] { PlayerDef.ACTION_ATTR.DAMAGE });
+			}
+
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				var velocity = Rigidbody.velocity;
+				velocity.x = 0f;
+				Rigidbody.velocity = velocity;
+			}
+
+			protected override bool UpdateFrontEnabled => false;
+		}
+
+		public class cDamageSmall : cDamageBase
+		{
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.DAMAGE_SMALL, out var stateHash))
+				{
+					_StateHash = stateHash;
+				}
+			}
+
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				SetAnimation(_StateHash);
+			}
+
+			protected override bool OnUpdate()
+			{
+				base.OnUpdate();
+				if (AnimCtrl.IsAnimationEnd(_StateHash))
+				{
+					return true;
+				}
+				return false;
+			}
+
+			private int _StateHash = 0;
+
+#if UNITY_EDITOR
+			public override string ActionName => "小ダメージ";
+#endif
+		}
+
+		public class cDamageSmash : cDamageBase
+		{
+			private enum STATE
+			{
+				DOWN,
+				UP,
+			}
+
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.DAMAGE_SMASH, out var damageStateHash))
+				{
+					_DamageSmashStateHash = damageStateHash;
+				}
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.DAMAGE_SMASH_UP, out var getUpStateHash))
+				{
+					_GetUpStateStateHash = getUpStateHash;
+				}
+			}
+
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				SetAnimation( _DamageSmashStateHash);
+				_State = STATE.DOWN;
+			}
+
+			protected override bool OnUpdate()
+			{
+				base.OnUpdate();
+
+				switch (_State)
+				{
+					case STATE.DOWN:
+						if (AnimCtrl.IsAnimationEnd(_DamageSmashStateHash))
+						{
+							SetAnimation(_GetUpStateStateHash);
+							_State = STATE.UP;
+						}
+						break;
+					case STATE.UP:
+						if (AnimCtrl.IsAnimationEnd(_GetUpStateStateHash) && Chara.IsOnGround())
+						{
+							return true;
+						}
+						break;
+				}
+				return false;
+			}
+
+			private int _DamageSmashStateHash = 0;
+			private int _GetUpStateStateHash = 0;
+
+			private STATE _State = STATE.DOWN;
+
+#if UNITY_EDITOR
+			public override string ActionName => "大ダメージ";
+#endif
+		}
+
+		public class cKneelDown : cDamageBase
+		{
+			private enum STATE
+			{
+				DOWN,
+				UP,
+			}
+
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.KNEEL_DOWN, out var kneelDownStateHash))
+				{
+					_KneelDownStateHash = kneelDownStateHash;
+				}
+				if (AnimContainer.TryGetStateHash(PlayerAnimation.ID.KNEEL_DOWN_UP, out var kneelDownUpStateHash))
+				{
+					_KneelDownUpStateHash = kneelDownUpStateHash;
+				}
+			}
+
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				_State = STATE.DOWN;
+			}
+
+			protected override bool OnUpdate()
+			{
+				base.OnUpdate();
+				switch (_State)
+				{
+					case STATE.DOWN:
+						if (AnimCtrl.IsAnimationEnd(_KneelDownStateHash))
+						{
+							SetAnimation(_KneelDownUpStateHash);
+							_State = STATE.UP;
+						}
+						break;
+					case STATE.UP:
+						if (AnimCtrl.IsAnimationEnd(_KneelDownUpStateHash) && Chara.IsOnGround())
+						{
+							return true;
+						}
+						break;
+				}
+				return false;
+			}
+
+			private int _KneelDownStateHash = 0;
+			private int _KneelDownUpStateHash = 0;
+
+			private STATE _State = STATE.DOWN;
+
+#if UNITY_EDITOR
+			public override string ActionName => "膝崩れ";
+#endif
+		}
+		#endregion ダメージ
+
+		public class cVictory : cPlayerSimpleActionBase
+		{
+			protected override void OnSetup()
+			{
+				base.OnSetup();
+				SetAnimationID(PlayerAnimation.ID.VICTORY);
+			}
+
+#if UNITY_EDITOR
+			public override string ActionName => "勝利";
+#endif
 		}
 	}
 }

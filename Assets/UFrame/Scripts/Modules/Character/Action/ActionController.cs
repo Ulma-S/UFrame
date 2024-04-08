@@ -74,6 +74,8 @@ namespace uframe
 			private set;
 		} = ACTION_ID.Invalid;
 
+		public cActionBase CurrentAction => _CurrentAction;
+
 		public ACTION_ID PrevActionID
 		{
 			get;

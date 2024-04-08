@@ -16,6 +16,12 @@ namespace app
 			JUMP_START,
 			JUMP_LOOP,
 			JUMP_END,
+			DAMAGE_SMALL,
+			DAMAGE_SMASH,
+			DAMAGE_SMASH_UP,
+			KNEEL_DOWN,
+			KNEEL_DOWN_UP,
+			VICTORY,
 		}
 	}
 }

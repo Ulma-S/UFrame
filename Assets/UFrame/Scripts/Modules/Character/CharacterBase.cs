@@ -11,9 +11,14 @@ namespace uframe
 			StandState.SetValue(standState);
 		}
 
-		public bool CheckGround()
+		public bool IsOnGround()
 		{
-			if (Physics.SphereCast(transform.position + GroundCheckOriginOffset, GroundCheckSphereRadius, Vector3.down, out var hitInfo, GroundCheckRayLength))
+			return CheckGroundDistance(GroundCheckRayLength);
+		}
+
+		public bool CheckGroundDistance(float distance)
+		{
+			if (Physics.SphereCast(transform.position + GroundCheckOriginOffset, GroundCheckSphereRadius, Vector3.down, out var hitInfo, distance))
 			{
 				if (hitInfo.collider != null && hitInfo.collider.tag == TagDef.Ground)
 				{
@@ -82,7 +87,7 @@ namespace uframe
 			protected set;
 		} = null;
 
-		protected cCharacterController CharacterController
+		protected CharacterController CharacterController
 		{
 			get;
 			set;

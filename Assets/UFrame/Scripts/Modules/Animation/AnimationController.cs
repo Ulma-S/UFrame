@@ -14,7 +14,7 @@ namespace uframe
 
 		public void SetAnimation(int stateHash, float transitionDuration = 0f)
 		{
-			Animator.Play(stateHash, 0, 0f);
+			Animator.CrossFade(stateHash, transitionDuration, 0, 0f);
 		}
 
 		public float GetFloat(int hash)

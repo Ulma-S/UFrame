@@ -8,5 +8,7 @@ namespace uframe
 	public static partial class GlobalService
 	{
 		public static AppInputService Input => (AppInputService)AppInputService.Instance;
+
+		public static AppCameraManager Camera => (AppCameraManager)AppCameraManager.Instance;
 	}
 }

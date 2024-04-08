@@ -2043,8 +2043,10 @@ GameObject:
   - component: {fileID: 3628042550720111850}
   - component: {fileID: 7490867449435641235}
   - component: {fileID: 892489992285505133}
+  - component: {fileID: 6724703459330332582}
   - component: {fileID: 978688564889387896}
   - component: {fileID: 6089395089757134427}
+  - component: {fileID: 3807700251666480263}
   m_Layer: 0
   m_Name: UnityChan
   m_TagString: Player
@@ -2128,7 +2130,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3562462469086590571}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1b2f871a1ea995e408b45238f223b50f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2140,10 +2142,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2294776
+  m_Radius: 0.3159131
   m_Height: 1.0901744
   m_Direction: 1
-  m_Center: {x: -9.831877e-17, y: 0.5590799, z: -0.022543564}
+  m_Center: {x: 1.7186934e-17, y: 0.5590799, z: -0.061290562}
 --- !u!114 &7490867449435641235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2258,6 +2260,18 @@ MonoBehaviour:
   - {fileID: 4443824748524431072}
   - {fileID: 1303377985199143270}
   - {fileID: 291218392989242173}
+--- !u!114 &6724703459330332582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562462469086590571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d3691a26976ba4bac58376b128a5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &978688564889387896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2272,6 +2286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _AnimationContainer: {fileID: 11400000, guid: 80265647360355646ae8ee68ed4a3ffb,
     type: 2}
+  _Param: {fileID: 11400000, guid: 74e0e0adbabf5274884cb81abf6d4c58, type: 2}
 --- !u!114 &6089395089757134427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2282,6 +2297,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0bb72999d481fb4d9b833143ec9b3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3807700251666480263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562462469086590571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 622058b08d232cd409429fc890e8c086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3599261961166633858
