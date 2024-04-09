@@ -12,8 +12,10 @@ namespace app
 			base.OnEnter();
 			var scrollCamera = cVirtualCamera.Create<cScrollVirtualCamera>();
 			var eventCamera = cVirtualCamera.Create<cEventVirtualCamera>();
+			var goalCamera = cVirtualCamera.Create<cGoalVirtualCamera>();
 			GlobalService.Camera.RegisterCamera(CameraDef.ID.SCROLL, scrollCamera);
 			GlobalService.Camera.RegisterCamera(CameraDef.ID.EVENT, eventCamera);
+			GlobalService.Camera.RegisterCamera(CameraDef.ID.GOAL, goalCamera);
 			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.SCROLL);
 		}
 

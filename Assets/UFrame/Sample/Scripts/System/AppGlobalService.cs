@@ -9,6 +9,10 @@ namespace uframe
 	{
 		public static AppInputService Input => (AppInputService)AppInputService.Instance;
 
-		public static AppCameraService Camera => (AppCameraService)AppCameraService.Instance;
+		public static AppCameraManager Camera => (AppCameraManager)AppCameraManager.Instance;
+
+		public static GameFlowManager GameFlow => GameFlowManager.Instance;
+
+		public static PlayerManager Pl => PlayerManager.Instance;
 	}
 }

@@ -27,7 +27,7 @@ namespace app
 			protected override bool OnUpdate()
 			{
 				UpdateStandState();
-				if (UpdateFrontEnabled)
+				if (UpdateFrontEnabled && !PlayerChara.PlayerContext.CheckSafeFlag(PlayerDef.SAFE_FLAG.SYSTEM_JACK))
 				{
 					UpdateFront();
 				}
@@ -60,7 +60,7 @@ namespace app
 				}
 				else
 				{
-					Chara.SetStandState(CharacterDef.STAND_STATE.FLY);
+					Chara.StandState = CharacterDef.STAND_STATE.FLY;
 				}
 			}
 
@@ -385,7 +385,7 @@ namespace app
 			{
 				base.OnEnter();
 				var velocity = Rigidbody.velocity;
-				velocity.y = -10f;
+				velocity.y = -PlayerChara.Param.Common.MoveInfo.FastFallSpeed;
 				Rigidbody.velocity = velocity;
 				_State = STATE.FALL;
 				SetAnimation(_FallStateHash);

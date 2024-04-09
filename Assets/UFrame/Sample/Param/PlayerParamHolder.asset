@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Common:
     _MoveInfo:
-      _MoveSpeed: 2.5
+      _MoveSpeed: 3
       _MoveSpeedScaleAir: 0.7
       _JumpForce: 10
       _JumpForceScaleAir: 0.8
       _MaxAirJumpCount: 1
+      _FastFallSpeed: 10
       _GroundCheckOriginOffset: {x: 0, y: 0.5, z: 0}
       _GroundCheckRayLength: 0.35
       _JumpEndCheckRayLength: 0.6

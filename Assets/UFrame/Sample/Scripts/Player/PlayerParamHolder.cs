@@ -29,6 +29,8 @@ namespace app
 
 			public int MaxAirJumpCount => _MaxAirJumpCount;
 
+			public float FastFallSpeed => _FastFallSpeed;
+
 			public Vector3 GroundCheckOriginOffset => _GroundCheckOriginOffset;
 
 			public float GroundCheckRayLength => _GroundCheckRayLength;
@@ -51,6 +53,9 @@ namespace app
 
 			[SerializeField, DisplayName("空中での最大ジャンプ可能回数")]
 			private int _MaxAirJumpCount = 1;
+
+			[SerializeField, DisplayName("高速落下速度")]
+			private float _FastFallSpeed = 10f;
 
 			[SerializeField, DisplayName("地面判定するRayの発射オフセット")]
 			private Vector3 _GroundCheckOriginOffset = new Vector3(0f, 0.5f, 0f);

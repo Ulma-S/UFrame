@@ -13,10 +13,21 @@ namespace app
 			ActionController.RequestSetAction(id);
 		}
 
+		public void SetSpeed(Vector3 velocity)
+		{
+			_Rigidbody.velocity = velocity;
+		}
+
+		public void ForceSetMoveState(PlayerDef.MOVE_STATE moveState)
+		{
+			PlayerContext.MoveInfo.MoveState = moveState;
+		}
+
 		protected override void OnStart()
 		{
 			AnimationSequence = GetComponent<PlayerAnimationSequence>();
 			BuildAction();
+			_Rigidbody = GetComponent<Rigidbody>();
 		}
 
 		protected override void OnUpdate()
@@ -29,7 +40,6 @@ namespace app
 
 		protected override void OnLateUpdate()
 		{
-			StandState.UpdateValue();
 		}
 
 		private void BuildAction()
@@ -73,5 +83,7 @@ namespace app
 
 		[SerializeField]
 		private PlayerParamHolder _Param = null;
+
+		private Rigidbody _Rigidbody = null;
 	}
 }

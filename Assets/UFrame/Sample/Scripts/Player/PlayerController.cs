@@ -27,6 +27,10 @@ namespace app
 		{
 			var moveInfo = _PlayerChara.PlayerContext.MoveInfo;
 			moveInfo.PrevMoveState = moveInfo.MoveState;
+			if (_PlayerChara.PlayerContext.CheckSafeFlag(PlayerDef.SAFE_FLAG.FORCE_MOVE_STATE))
+			{// äOïîÇ©ÇÁè„èëÇ´Ç∑ÇÈèÛë‘Ç»ÇÁçXêVÇµÇ»Ç¢
+				return;
+			}
 			if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.MOVE_RIGHT))
 			{
 				moveInfo.MoveState = PlayerDef.MOVE_STATE.MOVE_RIGHT;
@@ -43,6 +47,10 @@ namespace app
 
 		private void UpdateAction()
 		{
+			if (_PlayerChara.PlayerContext.CheckSafeFlag(PlayerDef.SAFE_FLAG.SYSTEM_JACK))
+			{
+				return;
+			}
 			var currentActionID = Character.ActionController.CurrentActionID;
 			var requestActionID = ACTION_ID.Invalid;
 			switch (currentActionID.Index)

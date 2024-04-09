@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace app
 {
-	public static partial class CameraDef
+	public static partial class ZoneDef
 	{
 		public enum ID
 		{
 			INVALID = -1,
-			SCROLL,
-			EVENT,
+			NORMAL,
 			GOAL,
 		}
 	}

@@ -25,7 +25,7 @@ namespace app
 		private void RegisterInputCommand()
 		{
 			{// 右移動コマンドの登録
-				var commandConditions = new Func<bool>[2];
+				var commandConditions = new Func<bool>[3];
 				commandConditions[0] = () =>
 				{
 					return Input.GetKey(KeyCode.D);
@@ -34,11 +34,15 @@ namespace app
 				{
 					return Input.GetKey(KeyCode.RightArrow);
 				};
+				commandConditions[2] = () =>
+				{
+					return Input.GetAxisRaw("Horizontal") > 0.5f;
+				};
 				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.MOVE_RIGHT, commandConditions);
 			}
 
 			{// 左移動コマンドの登録
-				var commandConditions = new Func<bool>[2];
+				var commandConditions = new Func<bool>[3];
 				commandConditions[0] = () =>
 				{
 					return Input.GetKey(KeyCode.A);
@@ -47,20 +51,28 @@ namespace app
 				{
 					return Input.GetKey(KeyCode.LeftArrow);
 				};
+				commandConditions[2] = () =>
+				{
+					return Input.GetAxisRaw("Horizontal") < -0.5f;
+				};
 				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.MOVE_LEFT, commandConditions);
 			}
 
 			{// ジャンプコマンドの登録
-				var commandConditions = new Func<bool>[1];
+				var commandConditions = new Func<bool>[2];
 				commandConditions[0] = () =>
 				{
 					return Input.GetKeyDown(KeyCode.Space);
+				};
+				commandConditions[1] = () =>
+				{
+					return Input.GetKeyDown(KeyCode.JoystickButton1);
 				};
 				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.JUMP, commandConditions);
 			}
 
 			{// 高速落下コマンドの登録
-				var commandConditions = new Func<bool>[2];
+				var commandConditions = new Func<bool>[3];
 				commandConditions[0] = () =>
 				{
 					return Input.GetKey(KeyCode.S);
@@ -68,6 +80,10 @@ namespace app
 				commandConditions[1] = () =>
 				{
 					return Input.GetKey(KeyCode.DownArrow);
+				};
+				commandConditions[2] = () =>
+				{
+					return Input.GetAxisRaw("Vertical") < -0.5f;
 				};
 				GlobalService.Input.RegisterGameCommand(GAME_COMMAND_TYPE.FALL, commandConditions);
 			}

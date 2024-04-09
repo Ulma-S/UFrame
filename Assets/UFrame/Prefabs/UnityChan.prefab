@@ -2047,6 +2047,7 @@ GameObject:
   - component: {fileID: 978688564889387896}
   - component: {fileID: 6089395089757134427}
   - component: {fileID: 3807700251666480263}
+  - component: {fileID: 2043924211658992859}
   m_Layer: 0
   m_Name: UnityChan
   m_TagString: Player
@@ -2142,7 +2143,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3159131
+  m_Radius: 0.4
   m_Height: 1.0901744
   m_Direction: 1
   m_Center: {x: 1.7186934e-17, y: 0.5590799, z: -0.061290562}
@@ -2309,6 +2310,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 622058b08d232cd409429fc890e8c086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2043924211658992859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562462469086590571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4b205fe938796448ecbdb518a2612a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3599261961166633858

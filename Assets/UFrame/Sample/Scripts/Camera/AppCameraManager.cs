@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace app
 {
-	public class AppCameraService : CameraService
+	public class AppCameraManager : CameraManager
 	{
 		public void ChangeActiveCamera(CameraDef.ID cameraID, float duration = 0.8f)
 		{

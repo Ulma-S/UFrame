@@ -17,6 +17,8 @@ namespace app
 		{
 			INVINCIBLE,
 			DAMAGE_FLOW,
+			FORCE_MOVE_STATE,
+			SYSTEM_JACK,
 		}
 
 		[Flags]

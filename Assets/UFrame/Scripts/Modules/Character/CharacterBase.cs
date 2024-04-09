@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 namespace uframe
 {
-	public class CharacterBase : MonoBehaviour, IPausable
+	public class CharacterBase : BehaviourBase, IPausable
 	{
-		public void SetStandState(CharacterDef.STAND_STATE standState)
-		{
-			StandState.SetValue(standState);
-		}
-
 		public bool IsOnGround()
 		{
 			return CheckGroundDistance(GroundCheckRayLength);
@@ -26,6 +22,26 @@ namespace uframe
 				}
 			}
 			return false;
+		}
+
+		public bool TryGetGroundPos(Vector3 pos, out Vector3 groundPos)
+		{
+			groundPos = pos;
+			var offset = 3f;
+			if (Physics.SphereCast(pos + new Vector3(0f, offset, 0f), GroundCheckSphereRadius, Vector3.down, out var hitInfo, GroundCheckRayLength + offset))
+			{
+				if (hitInfo.collider != null && hitInfo.collider.tag == TagDef.Ground)
+				{
+					groundPos = hitInfo.collider.ClosestPoint(pos);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public void Warp(Vector3 pos)
+		{
+			Pos = pos;
 		}
 
 		public void OnPause()
@@ -53,6 +69,7 @@ namespace uframe
 		private void LateUpdate()
 		{
 			OnLateUpdate();
+			_StandState.UpdateValue();
 			Context.UpdateFlags();
 		}
 
@@ -93,11 +110,19 @@ namespace uframe
 			set;
 		} = null;
 
-		public cSafeValue<CharacterDef.STAND_STATE> StandState
+		public CharacterDef.STAND_STATE StandState
 		{
-			get;
-			private set;
-		} = new cSafeValue<CharacterDef.STAND_STATE>();
+			get
+			{
+				return _StandState.Value;
+			}
+			set
+			{
+				_StandState.SetValue(value);
+			}
+		}
+
+		private cSafeValue<CharacterDef.STAND_STATE> _StandState = new cSafeValue<CharacterDef.STAND_STATE>();
 
 		public virtual Vector3 GroundCheckOriginOffset
 		{

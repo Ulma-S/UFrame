@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace uframe
 {
-	public class CameraService : GlobalServiceElement<CameraService>
+	public class CameraManager : GlobalServiceElement<CameraManager>
 	{
 		public void ChangeActiveCamera(int cameraID, float duration = 0.8f)
 		{
@@ -102,6 +102,8 @@ namespace uframe
 			get;
 			private set;
 		} = -1;
+
+		public bool IsCameraTransition => ChangeDurationTimer.Enabled;
 
 		protected Camera Camera
 		{
