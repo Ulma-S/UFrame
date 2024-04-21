@@ -41,10 +41,10 @@ namespace app
 			switch (_HitType.Value)
 			{
 				case HitDef.TYPE.SMALL:
-					_Chara.RequestSetAction(PlayerAction.SetID.DamageSmall);
+					_Chara.RequestSetAction(PlayerAction.Scroll.SetID.DamageSmall);
 					break;
 				case HitDef.TYPE.SMASH:
-					_Chara.RequestSetAction(PlayerAction.SetID.DamageSmash);
+					_Chara.RequestSetAction(PlayerAction.Scroll.SetID.DamageSmash);
 					break;
 			}
 			var playerAction = _Chara.ActionController.CurrentAction as PlayerAction.cPlayerActionBase;
@@ -58,9 +58,9 @@ namespace app
 				{
 					if (_Chara.AnimationSequence.IsCancellable)
 					{
-						if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _Chara))
+						if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Move, _Chara))
 						{
-							_Chara.RequestSetAction(PlayerAction.SetID.Move);
+							_Chara.RequestSetAction(PlayerAction.Scroll.SetID.Move);
 							return;
 						}
 					}

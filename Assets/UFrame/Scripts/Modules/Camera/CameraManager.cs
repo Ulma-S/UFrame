@@ -149,13 +149,13 @@ namespace uframe
 
 		public bool IsCameraTransition => ChangeDurationTimer.Enabled;
 
-		protected Camera Camera
+		public cVirtualCamera CurrentVirtualCamera
 		{
 			get;
 			private set;
 		} = null;
 
-		protected cVirtualCamera CurrentVirtualCamera
+		protected Camera Camera
 		{
 			get;
 			private set;
@@ -179,7 +179,7 @@ namespace uframe
 			set;
 		} = 2f;
 
-		private Dictionary<int, cVirtualCamera> _VirtualCameraHolder = new Dictionary<int, cVirtualCamera>();
+		protected Dictionary<int, cVirtualCamera> _VirtualCameraHolder = new Dictionary<int, cVirtualCamera>();
 
 		private cSafeFlag<CameraDef.SAFE_FLAG> _SafeFlag = new cSafeFlag<CameraDef.SAFE_FLAG>();
 	}

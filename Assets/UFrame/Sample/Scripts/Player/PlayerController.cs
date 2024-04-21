@@ -55,74 +55,74 @@ namespace app
 			var requestActionID = ACTION_ID.Invalid;
 			switch (currentActionID.Index)
 			{
-				case PlayerAction.ID.Idle:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+				case PlayerAction.Scroll.ID.Idle:
+					if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Jump, _PlayerChara))
 					{
-						requestActionID = PlayerAction.SetID.Jump;
+						requestActionID = PlayerAction.Scroll.SetID.Jump;
 					}
-					else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+					else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Move, _PlayerChara))
 					{
-						requestActionID = PlayerAction.SetID.Move;
-					}
-					break;
-				case PlayerAction.ID.Move:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
-					{
-						requestActionID = PlayerAction.SetID.Jump;
+						requestActionID = PlayerAction.Scroll.SetID.Move;
 					}
 					break;
-				case PlayerAction.ID.Jump:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.AirJump, _PlayerChara))
+				case PlayerAction.Scroll.ID.Move:
+					if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Jump, _PlayerChara))
 					{
-						requestActionID = PlayerAction.SetID.AirJump;
+						requestActionID = PlayerAction.Scroll.SetID.Jump;
 					}
-					else if (PlayerActionCondition.Judge(PlayerAction.SetID.FastFall, _PlayerChara))
+					break;
+				case PlayerAction.Scroll.ID.Jump:
+					if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.AirJump, _PlayerChara))
 					{
-						requestActionID = PlayerAction.SetID.FastFall;
+						requestActionID = PlayerAction.Scroll.SetID.AirJump;
+					}
+					else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.FastFall, _PlayerChara))
+					{
+						requestActionID = PlayerAction.Scroll.SetID.FastFall;
 					}
 					else if (_PlayerChara.AnimationSequence.IsCancellable)
 					{
-						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara, true))
+						if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Jump, _PlayerChara, true))
 						{
-							requestActionID = PlayerAction.SetID.Jump;
+							requestActionID = PlayerAction.Scroll.SetID.Jump;
 						}
-						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Move, _PlayerChara))
 						{
-							requestActionID = PlayerAction.SetID.Move;
+							requestActionID = PlayerAction.Scroll.SetID.Move;
 						}
 					}
 					break;
-				case PlayerAction.ID.AirJump:
-					if (PlayerActionCondition.Judge(PlayerAction.SetID.AirJump, _PlayerChara, true))
+				case PlayerAction.Scroll.ID.AirJump:
+					if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.AirJump, _PlayerChara, true))
 					{
-						requestActionID = PlayerAction.SetID.AirJump;
+						requestActionID = PlayerAction.Scroll.SetID.AirJump;
 					}
-					else if (PlayerActionCondition.Judge(PlayerAction.SetID.FastFall, _PlayerChara))
+					else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.FastFall, _PlayerChara))
 					{
-						requestActionID = PlayerAction.SetID.FastFall;
+						requestActionID = PlayerAction.Scroll.SetID.FastFall;
 					}
 					else if (_PlayerChara.AnimationSequence.IsCancellable)
 					{
-						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+						if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Jump, _PlayerChara))
 						{
-							requestActionID = PlayerAction.SetID.Jump;
+							requestActionID = PlayerAction.Scroll.SetID.Jump;
 						}
-						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Move, _PlayerChara))
 						{
-							requestActionID = PlayerAction.SetID.Move;
+							requestActionID = PlayerAction.Scroll.SetID.Move;
 						}
 					}
 					break;
-				case PlayerAction.ID.FastFall:
+				case PlayerAction.Scroll.ID.FastFall:
 					if (_PlayerChara.AnimationSequence.IsCancellable)
 					{
-						if (PlayerActionCondition.Judge(PlayerAction.SetID.Jump, _PlayerChara))
+						if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Jump, _PlayerChara))
 						{
-							requestActionID = PlayerAction.SetID.Jump;
+							requestActionID = PlayerAction.Scroll.SetID.Jump;
 						}
-						else if (PlayerActionCondition.Judge(PlayerAction.SetID.Move, _PlayerChara))
+						else if (PlayerActionCondition.Judge(PlayerAction.Scroll.SetID.Move, _PlayerChara))
 						{
-							requestActionID = PlayerAction.SetID.Move;
+							requestActionID = PlayerAction.Scroll.SetID.Move;
 						}
 					}
 					break;
@@ -131,7 +131,7 @@ namespace app
 			{
 				if (requestActionID == ACTION_ID.Invalid)
 				{
-					requestActionID = PlayerAction.SetID.Idle;
+					requestActionID = PlayerAction.Scroll.SetID.Idle;
 				}
 			}
 			if (requestActionID != ACTION_ID.Invalid)

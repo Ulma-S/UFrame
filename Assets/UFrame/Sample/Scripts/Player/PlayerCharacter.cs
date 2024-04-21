@@ -44,16 +44,20 @@ namespace app
 
 		private void BuildAction()
 		{
-			ActionController.Register<PlayerAction.cIdle>(PlayerAction.SetID.Idle);
-			ActionController.Register<PlayerAction.cMove>(PlayerAction.SetID.Move);
-			ActionController.Register<PlayerAction.cJump>(PlayerAction.SetID.Jump);
-			ActionController.Register<PlayerAction.cAirJump>(PlayerAction.SetID.AirJump);
-			ActionController.Register<PlayerAction.cFastFall>(PlayerAction.SetID.FastFall);
-			ActionController.Register<PlayerAction.cDamageSmall>(PlayerAction.SetID.DamageSmall);
-			ActionController.Register<PlayerAction.cDamageSmash>(PlayerAction.SetID.DamageSmash);
-			ActionController.Register<PlayerAction.cKneelDown>(PlayerAction.SetID.KneelDown);
-			ActionController.Register<PlayerAction.cVictory>(PlayerAction.SetID.Victory);
-			ActionController.Setup(PlayerAction.SetID.Idle);
+			ActionController.Register<PlayerAction.Scroll.cIdle>(PlayerAction.Scroll.SetID.Idle);
+			ActionController.Register<PlayerAction.Scroll.cMove>(PlayerAction.Scroll.SetID.Move);
+			ActionController.Register<PlayerAction.Scroll.cJump>(PlayerAction.Scroll.SetID.Jump);
+			ActionController.Register<PlayerAction.Scroll.cAirJump>(PlayerAction.Scroll.SetID.AirJump);
+			ActionController.Register<PlayerAction.Scroll.cFastFall>(PlayerAction.Scroll.SetID.FastFall);
+			ActionController.Register<PlayerAction.Scroll.cDamageSmall>(PlayerAction.Scroll.SetID.DamageSmall);
+			ActionController.Register<PlayerAction.Scroll.cDamageSmash>(PlayerAction.Scroll.SetID.DamageSmash);
+			ActionController.Register<PlayerAction.Scroll.cKneelDown>(PlayerAction.Scroll.SetID.KneelDown);
+			ActionController.Register<PlayerAction.Scroll.cVictory>(PlayerAction.Scroll.SetID.Victory);
+
+			ActionController.Register<PlayerAction.Tps.cIdle>(PlayerAction.Tps.SetID.Idle);
+			ActionController.Register<PlayerAction.Tps.cMove>(PlayerAction.Tps.SetID.Move);
+			
+			ActionController.Setup(PlayerAction.Scroll.SetID.Idle);
 		}
 
 		public cPlayerContext PlayerContext

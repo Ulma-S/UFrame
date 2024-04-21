@@ -20,9 +20,9 @@ namespace app
 
 			switch (actionID.Index)
 			{
-				case PlayerAction.ID.Idle:
+				case PlayerAction.Scroll.ID.Idle:
 					return true;
-				case PlayerAction.ID.Move:
+				case PlayerAction.Scroll.ID.Move:
 					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.MOVE_LEFT))
 					{
 						return true;
@@ -32,13 +32,13 @@ namespace app
 						return true;
 					}
 					break;
-				case PlayerAction.ID.Jump:
+				case PlayerAction.Scroll.ID.Jump:
 					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.JUMP))
 					{
 						return true;
 					}
 					break;
-				case PlayerAction.ID.AirJump:
+				case PlayerAction.Scroll.ID.AirJump:
 					if (chara.PlayerContext.MoveInfo.AirJumpCount > chara.Param.Common.MoveInfo.MaxAirJumpCount)
 					{
 						return false;
@@ -48,7 +48,7 @@ namespace app
 						return true;
 					}
 					break;
-				case PlayerAction.ID.FastFall:
+				case PlayerAction.Scroll.ID.FastFall:
 					if (GlobalService.Input.IsCommandSuccess(GAME_COMMAND_TYPE.FALL))
 					{
 						return true;

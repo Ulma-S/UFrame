@@ -23,7 +23,7 @@ namespace app
 			{
 				base.OnEnter();
 				var playerChara = GlobalService.Pl.PlayerCharacter;
-				playerChara.RequestSetAction(PlayerAction.SetID.Idle);
+				playerChara.RequestSetAction(PlayerAction.Scroll.SetID.Idle);
 				playerChara.SetSpeed(Vector3.zero);
 			}
 		}
@@ -43,7 +43,7 @@ namespace app
 				{
 					_MoveState = PlayerDef.MOVE_STATE.MOVE_RIGHT;
 				}
-				playerChara.RequestSetAction(PlayerAction.SetID.Move);
+				playerChara.RequestSetAction(PlayerAction.Scroll.SetID.Move);
 			}
 
 			protected override bool OnUpdate()
@@ -71,7 +71,7 @@ namespace app
 				}
 				playerChara.Warp(warpPos);
 				playerChara.Rot = Quaternion.Euler(0f, 180f, 0f);
-				playerChara.RequestSetAction(PlayerAction.SetID.Idle);
+				playerChara.RequestSetAction(PlayerAction.Scroll.SetID.Idle);
 			}
 		}
 
@@ -100,7 +100,7 @@ namespace app
 			{
 				base.OnEnter();
 				var playerChara = GlobalService.Pl.PlayerCharacter;
-				playerChara.RequestSetAction(PlayerAction.SetID.Victory);
+				playerChara.RequestSetAction(PlayerAction.Scroll.SetID.Victory);
 			}
 
 			protected override bool OnUpdate()
