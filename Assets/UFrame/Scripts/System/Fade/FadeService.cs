@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,134 +32,39 @@ namespace uframe
 	/// </summary>
 	public class FadeService : GlobalServiceElement<FadeService>
 	{
-		public enum STATE
+		public async UniTask FadeIn(FadeDef.TYPE fadeType, float duration = 1f, float startAlpha = 1f, Action onFadeEnd = null)
 		{
-			NONE,
-			FADE_IN,
-			FADE_OUT,
-		}
-
-		/// <summary>
-		/// フェードインリクエスト
-		/// </summary>
-		/// <param name="duration">フェードの持続時間</param>
-		/// <param name="startAlpha">開始時のアルファ値</param>
-		/// <param name="onFadeEnd">フェード終了時のイベント</param>
-		public async UniTask FadeIn(float duration = 1f, float startAlpha = 1f, Action onFadeEnd = null)
-		{
-			if (_State != STATE.NONE)
+			if (_FadeControllerHolder.TryGetValue((int)fadeType, out var controller))
 			{
-				return;
+				_CurrentFadeType = fadeType;
+				await controller.FadeIn(duration, startAlpha, onFadeEnd);
 			}
-			_State = STATE.FADE_IN;
-			_FadeTimer.Limit = duration;
-			_FadeTimer.Reset();
-			ForceSetAlpha(startAlpha);
-			_StartAlpha = startAlpha;
-			_OnFadeEnd = onFadeEnd;
-			await UniTask.WaitUntil(() => _State == STATE.NONE, cancellationToken: this.GetCancellationTokenOnDestroy());
 		}
 
-		/// <summary>
-		/// フェードアウトリクエスト
-		/// </summary>
-		/// <param name="duration">フェードの持続時間</param>
-		/// <param name="startAlpha">開始時のアルファ値</param>
-		/// <param name="onFadeEnd">フェード終了時のイベント</param>
-		public async UniTask FadeOut(float duration = 1f, float startAlpha = 0f, Action onFadeEnd = null)
+		public async UniTask FadeOut(FadeDef.TYPE fadeType, float duration = 1f, float startAlpha = 0f, Action onFadeEnd = null)
 		{
-			if (_State != STATE.NONE)
+			if (_FadeControllerHolder.TryGetValue((int)fadeType, out var controller))
 			{
-				return;
+				_CurrentFadeType = fadeType;
+				await controller.FadeOut(duration, startAlpha, onFadeEnd);
 			}
-			_State = STATE.FADE_OUT;
-			_FadeTimer.Limit = duration;
-			_FadeTimer.Reset();
-			ForceSetAlpha(startAlpha);
-			_StartAlpha = startAlpha;
-			_OnFadeEnd = onFadeEnd;
-			await UniTask.WaitUntil(() => _State == STATE.NONE, cancellationToken: this.GetCancellationTokenOnDestroy());
 		}
 
-		/// <summary>
-		/// アルファを設定
-		/// </summary>
-		/// <param name="alpha"></param>
-		public void ForceSetAlpha(float alpha)
+		public void RegisterController(FadeDef.TYPE fadeType, FadeControllerBase controller)
 		{
-			var color = _FadePanel.color;
-			color.a = alpha;
-			_FadePanel.color = color;
-		}
-
-		private void Start()
-		{
-			_FadePanel = GetComponent<Image>();
+			_FadeControllerHolder.Add((int)fadeType, controller);
 		}
 
 		private void Update()
 		{
-			if (_State == STATE.NONE)
+			if (_FadeControllerHolder.TryGetValue((int)_CurrentFadeType, out var controller))
 			{
-				return;
-			}
-			var deltaSec = Time.deltaTime;
-			_FadeTimer.Update(deltaSec);
-			var remainTime = _FadeTimer.Limit - _FadeTimer.Timer;
-			if (_State == STATE.FADE_IN)
-			{
-				if (remainTime < Mathf.Epsilon)
-				{
-					ForceSetAlpha(0f);
-					_State = STATE.NONE;
-					_OnFadeEnd?.Invoke();
-				}
-				else
-				{
-					var deltaAlpha = _StartAlpha * deltaSec / _FadeTimer.Limit;
-					var color = _FadePanel.color;
-					color.a -= deltaAlpha;
-					if (color.a < Mathf.Epsilon)
-					{
-						color.a = 0f;
-						_State = STATE.NONE;
-						_OnFadeEnd?.Invoke();
-					}
-					ForceSetAlpha(color.a);
-				}
-			}
-			else
-			{
-				if (remainTime < Mathf.Epsilon)
-				{
-					ForceSetAlpha(1f);
-					_State = STATE.NONE;
-					_OnFadeEnd?.Invoke();
-				}
-				else
-				{
-					var deltaAlpha = (1f - _StartAlpha) * deltaSec / _FadeTimer.Limit;
-					var color = _FadePanel.color;
-					color.a += deltaAlpha;
-					if ((1f - color.a) < Mathf.Epsilon)
-					{
-						color.a = 1f;
-						_State = STATE.NONE;
-						_OnFadeEnd?.Invoke();
-					}
-					ForceSetAlpha(color.a);
-				}
+				controller.UpdateController();
 			}
 		}
 
-		private Image _FadePanel = null;
+		private Dictionary<int, FadeControllerBase> _FadeControllerHolder = new Dictionary<int, FadeControllerBase>();
 
-		private STATE _State = STATE.NONE;
-
-		private cTimer _FadeTimer = new cTimer();
-
-		private float _StartAlpha = 0f;
-
-		private Action _OnFadeEnd = null;
+		private FadeDef.TYPE _CurrentFadeType = FadeDef.TYPE.ALPHA;
 	}
 }

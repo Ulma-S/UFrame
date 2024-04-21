@@ -7,9 +7,9 @@ namespace app
 {
 	public class AppCameraManager : CameraManager
 	{
-		public void ChangeActiveCamera(CameraDef.ID cameraID, float duration = 0.8f)
+		public void ChangeActiveCamera(CameraDef.ID cameraID, float duration = 0.8f, bool immediately = false)
 		{
-			ChangeActiveCamera((int)cameraID, duration);
+			ChangeActiveCamera((int)cameraID, duration, immediately);
 		}
 
 		public void RegisterCamera(CameraDef.ID cameraID, cVirtualCamera camera)
@@ -17,21 +17,9 @@ namespace app
 			RegisterCamera((int)cameraID, camera);
 		}
 
-		protected override void OnUpdateChangeDuration()
+		public void UnregisterCamera(CameraDef.ID cameraID)
 		{
-			var lerpScale = ChangeDurationTimer.Timer / ChangeDurationTimer.Limit;
-			var prevCamera = PrevVirtualCamera as cOrthographicVirtualCamera;
-			var currentCamera = CurrentVirtualCamera as cOrthographicVirtualCamera;
-			if (prevCamera != null && currentCamera != null)
-			{
-				Camera.orthographicSize = Mathf.Lerp(prevCamera.Size, currentCamera.Size, lerpScale);
-			}
-		}
-
-		protected override void OnEndChangeDuration()
-		{
-			var currentCamera = CurrentVirtualCamera as cOrthographicVirtualCamera;
-			Camera.orthographicSize = currentCamera.Size;
+			UnregisterCamera((int)cameraID);
 		}
 
 		public CameraDef.ID CurrentCameraID => (CameraDef.ID)CurrentCameraIDInt;

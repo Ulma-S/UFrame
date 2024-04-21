@@ -5,7 +5,7 @@ using uframe;
 
 namespace app
 {
-	public class cGameSceneState : cSceneStateBase
+	public class cScrollGameSceneState : cSceneStateBase
 	{
 		protected override void OnEnter()
 		{
@@ -16,7 +16,7 @@ namespace app
 			GlobalService.Camera.RegisterCamera(CameraDef.ID.SCROLL, scrollCamera);
 			GlobalService.Camera.RegisterCamera(CameraDef.ID.EVENT, eventCamera);
 			GlobalService.Camera.RegisterCamera(CameraDef.ID.GOAL, goalCamera);
-			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.SCROLL);
+			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.SCROLL, immediately: true);
 		}
 
 		protected override void OnUpdate()
@@ -37,12 +37,22 @@ namespace app
 			}
 		}
 
+		protected override void OnExit()
+		{
+			base.OnExit();
+			GlobalService.Camera.UnregisterCamera(CameraDef.ID.SCROLL);
+			GlobalService.Camera.UnregisterCamera(CameraDef.ID.EVENT);
+			GlobalService.Camera.UnregisterCamera(CameraDef.ID.GOAL);
+			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.DEFAULT);
+		}
+
 		public override bool CheckSceneTransition(out SceneDef.PACK_ID nextScenePackID)
 		{
 			nextScenePackID = SceneDef.PACK_ID.INVALID;
 			if (GlobalService.Input.IsCommandSuccess(UI_COMMAND_TYPE.CANCEL))
 			{
-				GlobalService.Scene.LoadScenePackWithFade(SceneDef.PACK_ID.SAMPLE_TITLE);
+				nextScenePackID = SceneDef.PACK_ID.SAMPLE_TITLE;
+				return true;
 			}
 			return false;
 		}

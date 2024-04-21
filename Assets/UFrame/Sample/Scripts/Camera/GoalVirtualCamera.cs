@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace app
 {
-	public class cGoalVirtualCamera : cOrthographicVirtualCamera
+	public class cGoalVirtualCamera : cOrthographicCamera
 	{
 		protected override void OnSetup()
 		{

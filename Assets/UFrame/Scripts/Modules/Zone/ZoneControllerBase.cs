@@ -44,20 +44,28 @@ namespace uframe
 		private void OnTriggerEnter(Collider other)
 		{
 			var zoneLocator = other.GetComponent<ZoneLocatorBase>();
-			OnEnter(new ZONE_HIT_INFO(other, zoneLocator));
+			if (zoneLocator != null)
+			{
+				OnEnter(new ZONE_HIT_INFO(other, zoneLocator));
+			}
 		}
 
 		private void OnTriggerStay(Collider other)
 		{
 			var zoneLocator = other.GetComponent<ZoneLocatorBase>();
-			OnStay(new ZONE_HIT_INFO(other, zoneLocator));
+			if (zoneLocator != null)
+			{
+				OnStay(new ZONE_HIT_INFO(other, zoneLocator));
+			}
 		}
 
 		private void OnTriggerExit(Collider other)
 		{
 			var zoneLocator = other.GetComponent<ZoneLocatorBase>();
-			OnExit(new ZONE_HIT_INFO(other, zoneLocator));
+			if (zoneLocator != null)
+			{
+				OnExit(new ZONE_HIT_INFO(other, zoneLocator));
+			}
 		}
-
 	}
 }

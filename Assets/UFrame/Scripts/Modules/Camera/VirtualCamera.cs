@@ -15,10 +15,21 @@ namespace uframe
 
 		public void Setup()
 		{
+			Transform = Camera.main.transform;
 			OnSetup();
 		}
 
 		protected virtual void OnSetup()
+		{
+
+		}
+
+		public void Enter()
+		{
+			OnEnter();
+		}
+
+		protected virtual void OnEnter()
 		{
 
 		}
@@ -29,6 +40,16 @@ namespace uframe
 		}
 
 		protected virtual void OnUpdate()
+		{
+
+		}
+
+		public void Exit()
+		{
+			OnExit();
+		}
+
+		protected virtual void OnExit()
 		{
 
 		}
@@ -49,5 +70,11 @@ namespace uframe
 			get;
 			set;
 		} = Quaternion.identity;
+
+		public Transform Transform
+		{
+			get;
+			private set;
+		} = null;
 	}
 }

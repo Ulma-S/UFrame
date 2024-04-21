@@ -15,3 +15,9 @@ MonoBehaviour:
   _ScrollCamera:
     _OriginPosition: {x: 0, y: 2.5, z: -10}
     _Size: 5
+  _TpsCamera:
+    _BaseOffset: {x: 0, y: 1, z: -3}
+    _BaseRotation: {x: 0.08715574, y: 0, z: 0, w: 0.9961947}
+    _Fov: 80
+    _MoveSpeed: 100
+  _UpdateTransformScale: 5

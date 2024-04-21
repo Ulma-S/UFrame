@@ -105,9 +105,9 @@ namespace uframe
 		/// </summary>
 		/// <param name="scenePackID"></param>
 		/// <param name="fadeDuration"></param>
-		public async void LoadScenePackWithFade(SceneDef.PACK_ID scenePackID, float fadeDuration = 1f, Action onLoadEnd = null)
+		public async void LoadScenePackWithFade(SceneDef.PACK_ID scenePackID, FadeDef.TYPE fadeType = FadeDef.TYPE.CUTOUT, float fadeDuration = 1f, Action onLoadEnd = null)
 		{
-			await LoadScenePackWithFadeAsync(scenePackID, fadeDuration);
+			await LoadScenePackWithFadeAsync(scenePackID, fadeType, fadeDuration);
 			onLoadEnd?.Invoke();
 		}
 
@@ -117,10 +117,10 @@ namespace uframe
 		/// </summary>
 		/// <param name="fadeDuration"></param>
 		/// <returns></returns>
-		public async UniTask LoadScenePackWithFadeAsync(SceneDef.PACK_ID scenePackID, float fadeDuration = 1f)
+		public async UniTask LoadScenePackWithFadeAsync(SceneDef.PACK_ID scenePackID, FadeDef.TYPE fadeType = FadeDef.TYPE.ALPHA, float fadeDuration = 1f)
 		{
 			IsSceneTransition = true;
-			await GlobalService.Fade.FadeOut(fadeDuration).SuppressCancellationThrow();
+			await GlobalService.Fade.FadeOut(fadeType, fadeDuration).SuppressCancellationThrow();
 			var loadSceneTask = LoadScenePackAsyncCore(scenePackID);
 			var waitDurationTask = UniTask.Delay(TimeSpan.FromSeconds(SceneDef.LoadingDurationSec), cancellationToken: this.GetCancellationTokenOnDestroy());
 			var tasks = new UniTask[]
@@ -128,7 +128,7 @@ namespace uframe
 				loadSceneTask, waitDurationTask,
 			};
 			await UniTask.WhenAll(tasks).SuppressCancellationThrow();
-			await GlobalService.Fade.FadeIn(fadeDuration).SuppressCancellationThrow();
+			await GlobalService.Fade.FadeIn(fadeType,fadeDuration).SuppressCancellationThrow();
 			IsSceneTransition = false;
 		}
 

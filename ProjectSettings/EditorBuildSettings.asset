@@ -12,8 +12,11 @@ EditorBuildSettings:
     path: Assets/UFrame/Sample/Scenes/Title.unity
     guid: dd2bdae216e46fa4fb41be76c606c8a0
   - enabled: 1
-    path: Assets/UFrame/Sample/Scenes/Game.unity
+    path: Assets/UFrame/Sample/Scenes/ScrollGame.unity
     guid: d4b2a1408b6d893469942637e60b0310
+  - enabled: 1
+    path: Assets/UFrame/Sample/Scenes/ThirdPersonGame.unity
+    guid: bae28c40b6abfa140bea339858e8cf91
   - enabled: 1
     path: Assets/UFrame/Sample/Scenes/GameSetting.unity
     guid: 3debf4e8791daee4c9043fa4a94302d0

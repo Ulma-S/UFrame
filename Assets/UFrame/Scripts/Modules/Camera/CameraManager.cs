@@ -6,16 +6,35 @@ namespace uframe
 {
 	public class CameraManager : GlobalServiceElement<CameraManager>
 	{
-		public void ChangeActiveCamera(int cameraID, float duration = 0.8f)
+		public void ChangeActiveCamera(int cameraID, float duration = 0.8f, bool immediately = false)
 		{
-			if (_VirtualCameraHolder.TryGetValue(cameraID, out var camera))
+			if (_VirtualCameraHolder.TryGetValue(cameraID, out var virtualCamera))
 			{
 				PrevVirtualCamera = CurrentVirtualCamera;
-				CurrentVirtualCamera = camera;
+				CurrentVirtualCamera?.Exit();
+				CurrentVirtualCamera = virtualCamera;
+				CurrentVirtualCamera.Enter();
 				CurrentCameraIDInt = cameraID;
-				ChangeDurationTimer.Reset();
-				ChangeDurationTimer.Limit = duration;
-				ChangeDurationTimer.Enabled = true;
+				if (virtualCamera is cPerspectiveCamera)
+				{
+					Camera.orthographic = false;
+				}
+				else if (virtualCamera is cOrthographicCamera)
+				{
+					Camera.orthographic = true;
+				}
+				if (immediately)
+				{
+					Camera.transform.position = CurrentVirtualCamera.Position;
+					Camera.transform.rotation = CurrentVirtualCamera.Rotation;
+					ChangeDurationTimer.Enabled = false;
+				}
+				else
+				{
+					ChangeDurationTimer.Reset();
+					ChangeDurationTimer.Limit = duration;
+					ChangeDurationTimer.Enabled = true;
+				}
 			}
 			else
 			{
@@ -28,7 +47,17 @@ namespace uframe
 			_VirtualCameraHolder.Add(cameraID, camera);
 		}
 
-		protected override void OnStart()
+		public void UnregisterCamera(int cameraID)
+		{
+			_VirtualCameraHolder.Remove(cameraID);
+		}
+
+		public void OnSafeFlag(CameraDef.SAFE_FLAG flag)
+		{
+			_SafeFlag.On(flag);
+		}
+
+		protected override void OnAwake()
 		{
 			Camera = Camera.main;
 		}
@@ -48,11 +77,8 @@ namespace uframe
 				CurrentVirtualCamera.Update();
 				UpdateTransform();
 			}
-		}
 
-		protected virtual void OnUpdateChangeDuration()
-		{
-
+			_SafeFlag.UpdateFlags();
 		}
 
 		protected virtual void OnEndChangeDuration()
@@ -82,19 +108,37 @@ namespace uframe
 				ChangeDurationTimer.Enabled = false;
 				return;
 			}
-			var lerpScale = ChangeDurationTimer.Timer / ChangeDurationTimer.Limit;
-			Camera.transform.position = Vector3.Lerp(PrevVirtualCamera.Position, CurrentVirtualCamera.Position, lerpScale);
-			Camera.transform.rotation = Quaternion.Lerp(PrevVirtualCamera.Rotation, CurrentVirtualCamera.Rotation, lerpScale);
-			OnUpdateChangeDuration();
+			UpdateOrthographicDuration();
 			ChangeDurationTimer.Update(Time.deltaTime);
 		}
 
 		private void UpdateTransform()
 		{
 			var lerpScale = Time.deltaTime * UpdateTransformScale;
-			Camera.transform.position = Vector3.Lerp(Camera.transform.position, CurrentVirtualCamera.Position, lerpScale);
-			Camera.transform.rotation = Quaternion.Lerp(Camera.transform.rotation, CurrentVirtualCamera.Rotation, lerpScale);
+			if (_SafeFlag.IsOn(CameraDef.SAFE_FLAG.DISABLE_LERP))
+			{
+				Camera.transform.position = CurrentVirtualCamera.Position;
+				Camera.transform.rotation = CurrentVirtualCamera.Rotation;
+			}
+			else
+			{
+				Camera.transform.position = Vector3.Lerp(Camera.transform.position, CurrentVirtualCamera.Position, lerpScale);
+				Camera.transform.rotation = Quaternion.Lerp(Camera.transform.rotation, CurrentVirtualCamera.Rotation, lerpScale);
+			}
 			OnUpdateTransform();
+		}
+
+		private void UpdateOrthographicDuration()
+		{
+			var lerpScale = ChangeDurationTimer.Timer / ChangeDurationTimer.Limit;
+			Camera.transform.position = Vector3.Lerp(PrevVirtualCamera.Position, CurrentVirtualCamera.Position, lerpScale);
+			Camera.transform.rotation = Quaternion.Lerp(PrevVirtualCamera.Rotation, CurrentVirtualCamera.Rotation, lerpScale);
+			var prevCamera = PrevVirtualCamera as cOrthographicCamera;
+			var currentCamera = CurrentVirtualCamera as cOrthographicCamera;
+			if (prevCamera != null && currentCamera != null)
+			{
+				Camera.orthographicSize = Mathf.Lerp(prevCamera.Size, currentCamera.Size, lerpScale);
+			}
 		}
 
 		public int CurrentCameraIDInt
@@ -136,5 +180,7 @@ namespace uframe
 		} = 2f;
 
 		private Dictionary<int, cVirtualCamera> _VirtualCameraHolder = new Dictionary<int, cVirtualCamera>();
+
+		private cSafeFlag<CameraDef.SAFE_FLAG> _SafeFlag = new cSafeFlag<CameraDef.SAFE_FLAG>();
 	}
 }

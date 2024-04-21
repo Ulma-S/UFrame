@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace uframe
 {
-	public class cOrthographicVirtualCamera : cVirtualCamera
+	public class cOrthographicCamera : cVirtualCamera
 	{
 		public float Size
 		{

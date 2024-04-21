@@ -129,7 +129,7 @@ namespace app
 			{
 				if (AnimContainer.TryGetStateHash(id, out var stateHash))
 				{
-					_SetAnimationID = stateHash;
+					_SetAnimationHash = stateHash;
 					_IsAnimationInitialized = true;
 				}
 				else
@@ -143,11 +143,21 @@ namespace app
 				base.OnEnter();
 				if (_IsAnimationInitialized)
 				{
-					SetAnimation(_SetAnimationID);
+					SetAnimation(_SetAnimationHash);
 				}
 			}
 
-			private int _SetAnimationID = 0;
+			protected override bool OnUpdate()
+			{
+				base.OnUpdate();
+				if (Chara.AnimationController.IsAnimationEnd(_SetAnimationHash))
+				{
+					return true;
+				}
+				return false;
+			}
+
+			private int _SetAnimationHash = 0;
 			private bool _IsAnimationInitialized = false;
 		}
 
@@ -174,6 +184,11 @@ namespace app
 				Rigidbody.velocity = velocity;
 			}
 
+			protected override bool OnUpdate()
+			{
+				base. OnUpdate();
+				return false;
+			}
 #if UNITY_EDITOR
 			public override string ActionName => "‘Ò‹@";
 #endif

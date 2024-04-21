@@ -7,6 +7,12 @@ namespace app
 {
 	public class cTitleSceneState : cSceneStateBase
 	{
+		protected override void OnEnter()
+		{
+			base.OnEnter();
+			GlobalService.Camera.ChangeActiveCamera(CameraDef.ID.DEFAULT);
+		}
+
 		public override bool CheckSceneTransition(out SceneDef.PACK_ID nextScenePackID)
 		{
 			nextScenePackID = SceneDef.PACK_ID.INVALID;

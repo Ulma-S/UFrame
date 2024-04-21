@@ -71,6 +71,7 @@ namespace app
 				}
 				playerChara.Warp(warpPos);
 				playerChara.Rot = Quaternion.Euler(0f, 180f, 0f);
+				playerChara.RequestSetAction(PlayerAction.SetID.Idle);
 			}
 		}
 
@@ -116,6 +117,12 @@ namespace app
 
 		public class cEnd : cBase
 		{
+			protected override void OnEnter()
+			{
+				base.OnEnter();
+				GlobalService.Scene.LoadScenePackWithFade(SceneDef.PACK_ID.SAMPLE_RESULT);
+			}
+
 			protected override bool OnUpdate()
 			{
 				base.OnUpdate();

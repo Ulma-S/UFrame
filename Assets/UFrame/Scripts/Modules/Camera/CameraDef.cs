@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace app
+namespace uframe
 {
 	public static partial class CameraDef
 	{
-		public enum ID
+		public enum SAFE_FLAG
 		{
-			INVALID = -1,
-			DEFAULT,
-			SCROLL,
-			EVENT,
-			GOAL,
-			THIRD_PERSON,
+			DISABLE_LERP,
 		}
 	}
 }

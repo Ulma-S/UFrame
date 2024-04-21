@@ -10,6 +10,7 @@ namespace uframe
 			SAMPLE_TITLE,
 			SAMPLE_GAME,
 			SAMPLE_RESULT,
+			SAMPLE_THIRD_PERSON_GAME,
 		}
 
 		/// <summary>
